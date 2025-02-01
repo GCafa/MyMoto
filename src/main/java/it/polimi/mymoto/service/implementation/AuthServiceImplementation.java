@@ -49,14 +49,18 @@ public class AuthServiceImplementation implements AuthService {
 
     @Override
     public LoginResponse authenticateUser(@NonNull UserLoginRequest userLoginRequest) {
-        User user = userRepository.findByUsernameOrEmail(userLoginRequest.getUsername(), userLoginRequest.getEmail())
-            .orElseThrow(() -> new UserRegistrationException("User not found"));
+        Optional<User> user = userRepository.findByUsername(userLoginRequest.getUsername())
+            .or(() -> userRepository.findByEmail(userLoginRequest.getUsername()));
 
-        if(!passwordEncoder.matches(userLoginRequest.getPassword(), user.getPassword())) {
+        if(user.isEmpty()) {
+            throw new UserRegistrationException("User not found");
+        }
+
+        if(!passwordEncoder.matches(userLoginRequest.getPassword(), user.get().getPassword())) {
             throw new UserRegistrationException("Invalid password");
         }
 
-        String token = jwtService.generateToken(user);
+        String token = jwtService.generateToken(user.get());
 
         return new LoginResponse(token);
     }

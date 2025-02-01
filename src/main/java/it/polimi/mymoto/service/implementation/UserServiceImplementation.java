@@ -17,9 +17,4 @@ public class UserServiceImplementation implements UserService {
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
-
-    @Override
-    public User getUserByUsernameOrEmail(String username, String email) {
-        return userRepository.findByUsernameOrEmail(username, email).orElse(null);
-    }
 }

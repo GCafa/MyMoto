@@ -10,6 +10,10 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);
 
+    Optional<User> findByEmail(String email);
+
+    Optional<User> findByUsernameOrEmail(String username, String email);
+
     /**
      * @NonNull annotation is used to avoid null values, instead an empty list is returned
      *
@@ -17,6 +21,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
      */
     @NonNull
     List<User> findAll();
-
-    Optional<User> findByUsernameOrEmail(String username, String email);
 }
