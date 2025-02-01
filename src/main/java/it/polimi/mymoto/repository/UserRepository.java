@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findByUsername(String username);
 
     /**
      * @NonNull annotation is used to avoid null values, instead an empty list is returned
