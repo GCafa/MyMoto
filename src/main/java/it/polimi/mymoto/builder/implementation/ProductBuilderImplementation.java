@@ -5,6 +5,7 @@ import it.polimi.mymoto.model.Product;
 
 public class ProductBuilderImplementation implements ProductBuilder {
     private Long id;
+    private String brand;
     private String name;
     private double price;
     private double weight;
@@ -14,6 +15,12 @@ public class ProductBuilderImplementation implements ProductBuilder {
     @Override
     public ProductBuilder id(Long id) {
         this.id = id;
+        return this;
+    }
+
+    @Override
+    public ProductBuilder brand(String brand) {
+        this.brand = brand;
         return this;
     }
 
@@ -49,6 +56,6 @@ public class ProductBuilderImplementation implements ProductBuilder {
 
     @Override
     public Product build() {
-        return new Product(id, name, price, weight, description, imagePath);
+        return new Product(id, brand, name, price, weight, description, imagePath);
     }
 }

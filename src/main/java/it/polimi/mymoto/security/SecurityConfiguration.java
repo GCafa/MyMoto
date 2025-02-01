@@ -75,6 +75,7 @@ public class SecurityConfiguration {
                         .requestMatchers(ApiPathUtil.getRestPathByRole(Role.SELLER) + "/**").hasRole(Role.SELLER.name())
                         .requestMatchers(ApiPathUtil.getRestPathByRole(Role.CUSTOMER) + "/**").hasRole(Role.CUSTOMER.name())
                         .requestMatchers(ApiPathUtil.REST_PATH + "/auth/**").permitAll()
+                        .requestMatchers(ApiPathUtil.REST_PATH + "/user/**").permitAll()
                         .anyRequest().permitAll()
                 )
                 .sessionManagement(sessionManagement -> sessionManagement

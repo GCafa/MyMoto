@@ -39,9 +39,6 @@ public class User implements UserDetails {
     private Role role;
 
     @OneToMany(mappedBy = "user")
-    private List<Address> addresses;
-
-    @OneToMany(mappedBy = "user")
     private List<Order> orders;
 
     @Override

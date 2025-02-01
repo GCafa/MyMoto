@@ -1,7 +1,6 @@
 package it.polimi.mymoto.builder.implementation;
 
 import it.polimi.mymoto.builder.definition.UserBuilder;
-import it.polimi.mymoto.model.Address;
 import it.polimi.mymoto.model.Order;
 import it.polimi.mymoto.model.Role;
 import it.polimi.mymoto.model.User;
@@ -18,7 +17,6 @@ public class UserBuilderImplementation implements UserBuilder {
     private String email;
     private String password;
     private Role role;
-    private List<Address> addresses;
     private List<Order> orders;
 
     @Override
@@ -64,12 +62,6 @@ public class UserBuilderImplementation implements UserBuilder {
     }
 
     @Override
-    public UserBuilder addresses(List<Address> addresses) {
-        this.addresses = addresses;
-        return this;
-    }
-
-    @Override
     public UserBuilder orders(List<Order> orders) {
         this.orders = orders;
         return this;
@@ -77,6 +69,6 @@ public class UserBuilderImplementation implements UserBuilder {
 
     @Override
     public User build() {
-        return new User(id, firstName, lastName, username, email, password, role, addresses, orders);
+        return new User(id, firstName, lastName, username, email, password, role, orders);
     }
 }

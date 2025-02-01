@@ -42,6 +42,7 @@ public class OrderBuilderImplementation implements OrderBuilder {
 
     @Override
     public Order build() {
-        return new Order(id, userId, productId, quantity, totalPrice);
+//        return new Order(id, userId, productId, quantity, totalPrice);
+        return null;
     }
 }

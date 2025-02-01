@@ -1,16 +1,19 @@
 package it.polimi.mymoto.service.implementation;
 
-import it.polimi.mymoto.dto.request.ChangePasswordRequest;
+import it.polimi.mymoto.dto.request.UserModifyRequest;
+import it.polimi.mymoto.dto.request.UserPasswordChangeRequest;
+import it.polimi.mymoto.dto.response.CustomResponse;
+import it.polimi.mymoto.exception.custom.UserNotFoundException;
 import it.polimi.mymoto.model.User;
 import it.polimi.mymoto.repository.UserRepository;
 import it.polimi.mymoto.service.definition.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import lombok.NonNull;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -25,32 +28,73 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public User getUserByUsernameOrEmail(String username, String email) {
-        return userRepository.findByUsernameOrEmail(username, email).orElse(null);
+    public CustomResponse modify(@NonNull UserModifyRequest userModifyRequest) {
+        Optional<User> user = userRepository.findById(userModifyRequest.getId());
+
+        if (user.isEmpty()) {
+            throw new UserNotFoundException();
+        }
+
+        if (!passwordEncoder.matches(userModifyRequest.getPassword(), user.get().getPassword())) {
+            return new CustomResponse("The password inserted is not correct");
+        }
+
+        User modifiedUser = user.get();
+        modifiedUser.setUsername(userModifyRequest.getUsername());
+        modifiedUser.setEmail(userModifyRequest.getEmail());
+
+        try {
+            userRepository.save(modifiedUser);
+        } catch (Exception e) {
+            return new CustomResponse("Error modifying user");
+        }
+
+        return new CustomResponse("User modified successfully");
     }
 
     @Override
-    public void changePassword(ChangePasswordRequest request, Principal connectedUser) {
-        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+    public CustomResponse changePassword(@NonNull UserPasswordChangeRequest userPasswordChangeRequest) {
+        Optional<User> user = userRepository.findById(userPasswordChangeRequest.getId());
 
-        // check if the current password is correct
-        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
-            throw new IllegalStateException("Wrong password");
-        }
-        // check if the two new passwords are the same
-        if (!request.getNewPassword().equals(request.getConfirmationPassword())) {
-            throw new IllegalStateException("Password are not the same");
+        if (user.isEmpty()) {
+            throw new UserNotFoundException();
         }
 
-        // update the password
-        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        if (!passwordEncoder.matches(userPasswordChangeRequest.getCurrentPassword(), user.get().getPassword())) {
+            return new CustomResponse("The old password is not correct");
+        }
 
-        // save the new password
-        userRepository.save(user);
+        User modifiedUser = user.get();
+
+        if (!userPasswordChangeRequest.getNewPassword().equals(userPasswordChangeRequest.getRepeatNewPassword())) {
+            return new CustomResponse("The passwords do not match");
+        }
+
+        modifiedUser.setPassword(passwordEncoder.encode(userPasswordChangeRequest.getNewPassword()));
+
+        try {
+            userRepository.save(modifiedUser);
+        } catch (Exception e) {
+            return new CustomResponse("Error changing password");
+        }
+
+        return new CustomResponse("Password changed successfully");
     }
 
     @Override
-    public void delete(Long userId) {
-        userRepository.deleteById(userId);
+    public CustomResponse delete(@NonNull Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+
+        if (user.isEmpty()) {
+            throw new UserNotFoundException();
+        }
+
+        try {
+            userRepository.delete(user.get());
+        } catch (Exception e) {
+            return new CustomResponse("Error deleting user");
+        }
+
+        return new CustomResponse("User deleted successfully");
     }
 }

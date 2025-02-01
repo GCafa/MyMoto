@@ -6,6 +6,7 @@ import it.polimi.mymoto.dto.response.CustomResponse;
 import it.polimi.mymoto.dto.response.LoginResponse;
 import it.polimi.mymoto.service.definition.AuthService;
 import it.polimi.mymoto.util.ApiPathUtil;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class AuthController {
     private final AuthService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<CustomResponse> register(@RequestBody UserRegistrationRequest userRegistrationRequest) {
+    public ResponseEntity<CustomResponse> register(@Valid @RequestBody UserRegistrationRequest userRegistrationRequest) {
         authenticationService.registerUser(userRegistrationRequest);
 
         return ResponseEntity
@@ -27,7 +28,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> authenticate(@RequestBody UserLoginRequest userLoginRequest) {
+    public ResponseEntity<LoginResponse> authenticate(@Valid @RequestBody UserLoginRequest userLoginRequest) {
         final LoginResponse response = authenticationService.authenticateUser(userLoginRequest);
 
         return ResponseEntity

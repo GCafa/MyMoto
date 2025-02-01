@@ -1,4 +1,4 @@
-package it.polimi.mymoto.exception;
+package it.polimi.mymoto.exception.custom;
 
 public class UserRegistrationException extends RuntimeException {
     public UserRegistrationException() {

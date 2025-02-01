@@ -1,7 +1,12 @@
-package it.polimi.mymoto.exception;
+package it.polimi.mymoto.exception.custom;
 
 public class DataValidationException extends RuntimeException {
     public DataValidationException(String message) {
         super("Data validation failed. " + message);
+    }
+
+    public DataValidationException()
+    {
+        super("Data validation failed.");
     }
 }

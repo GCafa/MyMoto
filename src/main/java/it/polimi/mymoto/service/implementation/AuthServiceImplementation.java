@@ -4,7 +4,7 @@ import it.polimi.mymoto.builder.implementation.UserBuilderImplementation;
 import it.polimi.mymoto.dto.request.UserLoginRequest;
 import it.polimi.mymoto.dto.request.UserRegistrationRequest;
 import it.polimi.mymoto.dto.response.LoginResponse;
-import it.polimi.mymoto.exception.UserRegistrationException;
+import it.polimi.mymoto.exception.custom.UserRegistrationException;
 import it.polimi.mymoto.model.Role;
 import it.polimi.mymoto.model.User;
 import it.polimi.mymoto.repository.UserRepository;

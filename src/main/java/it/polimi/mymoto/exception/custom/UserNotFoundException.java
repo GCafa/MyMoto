@@ -1,4 +1,4 @@
-package it.polimi.mymoto.exception;
+package it.polimi.mymoto.exception.custom;
 
 public class UserNotFoundException extends RuntimeException{
     public UserNotFoundException() {
