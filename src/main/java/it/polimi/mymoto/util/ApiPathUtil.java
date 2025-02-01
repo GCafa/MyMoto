@@ -9,10 +9,6 @@ public final class ApiPathUtil {
     public static final String BASE_PATH = "/api";
     public static final String REST_PATH = BASE_PATH + "/v1";
 
-    public static String getGeneralRestPath(Role role) {
-        return getRestPathByRole(role) + "/**";
-    }
-
     public static String getRestPathByRole(Role role) {
         return REST_PATH + "/" + role.name().toLowerCase();
     }

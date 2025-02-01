@@ -9,6 +9,7 @@ import org.springframework.security.access.expression.method.DefaultMethodSecuri
 import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -26,6 +27,7 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 @AllArgsConstructor
 public class SecurityConfiguration {
     private final JwtFilter jwtFilter;
+    private final AuthenticationProvider authenticationProvider;
     private final HandlerExceptionResolver handlerExceptionResolver;
 
     /**
@@ -69,14 +71,16 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(ApiPathUtil.getGeneralRestPath(Role.ADMIN)).hasRole(Role.ADMIN.name())
-                        .requestMatchers(ApiPathUtil.getGeneralRestPath(Role.SELLER)).hasRole(Role.SELLER.name())
-                        .requestMatchers(ApiPathUtil.getGeneralRestPath(Role.CUSTOMER)).hasRole(Role.CUSTOMER.name())
+                        .requestMatchers(ApiPathUtil.getRestPathByRole(Role.ADMIN) + "/**").hasRole(Role.ADMIN.name())
+                        .requestMatchers(ApiPathUtil.getRestPathByRole(Role.SELLER) + "/**").hasRole(Role.SELLER.name())
+                        .requestMatchers(ApiPathUtil.getRestPathByRole(Role.CUSTOMER) + "/**").hasRole(Role.CUSTOMER.name())
+                        .requestMatchers(ApiPathUtil.REST_PATH + "/auth/**").permitAll()
                         .anyRequest().permitAll()
                 )
                 .sessionManagement(sessionManagement -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
+                .authenticationProvider(authenticationProvider)
                 .exceptionHandling(exceptionHandling -> exceptionHandling
                         .authenticationEntryPoint((request, response, authException) -> handlerExceptionResolver.resolveException(request, response, null, authException))
                         .accessDeniedHandler((request, response, accessDeniedException) -> handlerExceptionResolver.resolveException(request, response, null, accessDeniedException))
