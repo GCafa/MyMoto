@@ -1,7 +1,9 @@
 package it.polimi.mymoto.controller;
 
+import it.polimi.mymoto.dto.request.UserLoginRequest;
 import it.polimi.mymoto.dto.request.UserRegistrationRequest;
 import it.polimi.mymoto.dto.response.CustomResponse;
+import it.polimi.mymoto.dto.response.LoginResponse;
 import it.polimi.mymoto.service.definition.AuthService;
 import it.polimi.mymoto.util.ApiPathUtil;
 import lombok.AllArgsConstructor;
@@ -22,5 +24,14 @@ public class AuthController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(new CustomResponse("Registration completed!"));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> authenticate(@RequestBody UserLoginRequest userLoginRequest) {
+        final LoginResponse response = authenticationService.authenticateUser(userLoginRequest);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
     }
 }
