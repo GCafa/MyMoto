@@ -37,6 +37,14 @@ public class Product implements Serializable {
 
     private String imagePath;
 
+    /**
+     * The state of the order.
+     * <p>
+     *     @transient to avoid serialization of the state, meaning that the state will not be saved in the database.
+     *     This is because the state is a runtime object that is not meant to be saved in the database.
+     *     The state is used to manage the product's lifecycle.
+ *     </p>
+     */
     private transient ProductState state;
 
     @ManyToOne

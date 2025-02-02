@@ -34,5 +34,14 @@ public class Order implements Serializable {
     @ManyToMany
     private List<Product> products;
 
+
+    /**
+     * The state of the order.
+     * <p>
+     *     @transient to avoid serialization of the state, meaning that the state will not be saved in the database.
+     *     This is because the state is a runtime object that is not meant to be saved in the database.
+     *     The state is used to manage the order's lifecycle.
+ *     </p>
+     */
     private transient OrderState orderState;
 }
