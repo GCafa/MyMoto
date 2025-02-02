@@ -32,12 +32,12 @@ public class AuthController {
     public ResponseEntity<LoginResponse> authenticate(@Valid @RequestBody UserLoginRequest userLoginRequest) {
         final LoginResponse response = authenticationService.authenticateUser(userLoginRequest);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + response.getJwt());
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.set("Authorization", "Bearer " + response.getJwt());
 
         return ResponseEntity
                 .ok()
-                .headers(headers)
+//                .headers(headers)
                 .body(response);
     }
 }

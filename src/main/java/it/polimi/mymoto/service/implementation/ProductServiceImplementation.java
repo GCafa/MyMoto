@@ -84,8 +84,17 @@ public class ProductServiceImplementation implements ProductService {
     }
 
     @Override
-    public List<ProductResponse> getAllBySeller() {
+    public List<ProductResponse> getAllByCurrentSeller() {
         List<Product> products = productRepository.findAllBySeller(userService.getCurrentUser());
+
+        return products.stream()
+                .map(product -> objectMapper.convertValue(product, ProductResponse.class))
+                .toList();
+    }
+
+    @Override
+    public List<ProductResponse> getAll() {
+        List<Product> products = productRepository.findAll();
 
         return products.stream()
                 .map(product -> objectMapper.convertValue(product, ProductResponse.class))

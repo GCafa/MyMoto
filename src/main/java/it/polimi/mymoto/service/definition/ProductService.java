@@ -16,7 +16,9 @@ public interface ProductService {
 
     CustomResponse delete(@NonNull Long id);
 
-    List<ProductResponse> getAllBySeller();
+    List<ProductResponse> getAllByCurrentSeller();
 
     ProductResponse getById(@NonNull Long id);
+
+    List<ProductResponse> getAll();
 }

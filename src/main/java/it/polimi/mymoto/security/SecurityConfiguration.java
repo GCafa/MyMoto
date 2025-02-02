@@ -39,7 +39,10 @@ public class SecurityConfiguration {
     @Bean
     static RoleHierarchy roleHierarchy() {
         return RoleHierarchyImpl.fromHierarchy(
-                Role.ADMIN + " > " + Role.SELLER + " > " + Role.CUSTOMER
+                """
+                    ROLE_ADMIN > ROLE_SELLER
+                    ROLE_SELLER > ROLE_CUSTOMER
+                """
         );
     }
 
@@ -71,23 +74,27 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(ApiPathUtil.getRestPathByRole(Role.ADMIN) + "/**").hasRole(Role.ADMIN.name())
-                        .requestMatchers(ApiPathUtil.getRestPathByRole(Role.SELLER) + "/**").hasRole(Role.SELLER.name())
-                        .requestMatchers(ApiPathUtil.getRestPathByRole(Role.CUSTOMER) + "/**").hasRole(Role.CUSTOMER.name())
                         .requestMatchers(ApiPathUtil.REST_PATH + "/auth/**").permitAll()
-                        .requestMatchers(ApiPathUtil.REST_PATH + "/user/**").permitAll()
+                        .requestMatchers(ApiPathUtil.REST_PATH + "/user/**").authenticated()
                         .requestMatchers(ApiPathUtil.REST_PATH + "/product/**").authenticated()
-                        .anyRequest().permitAll()
+                        .requestMatchers(ApiPathUtil.ADMIN_PATH + "/**").hasRole(Role.ADMIN.name())
+                        .requestMatchers(ApiPathUtil.SELLER_PATH + "/**").hasRole(Role.SELLER.name())
+                        .requestMatchers(ApiPathUtil.CUSTOMER_PATH + "/**").hasRole(Role.CUSTOMER.name())
+                        .anyRequest().denyAll()
                 )
-                .sessionManagement(sessionManagement -> sessionManagement
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
+                .anonymous(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .exceptionHandling(exceptionHandling -> exceptionHandling
-                        .authenticationEntryPoint((request, response, authException) -> handlerExceptionResolver.resolveException(request, response, null, authException))
-                        .accessDeniedHandler((request, response, accessDeniedException) -> handlerExceptionResolver.resolveException(request, response, null, accessDeniedException))
+                        .authenticationEntryPoint((request, response, authException) ->
+                                handlerExceptionResolver.resolveException(request, response, null, authException)
+                        )
+                        .accessDeniedHandler((request, response, accessDeniedException) ->
+                                handlerExceptionResolver.resolveException(request, response, null, accessDeniedException)
+                        )
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 }
+

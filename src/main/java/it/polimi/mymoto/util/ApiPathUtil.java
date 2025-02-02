@@ -1,6 +1,5 @@
 package it.polimi.mymoto.util;
 
-import it.polimi.mymoto.model.Role;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -8,8 +7,7 @@ import lombok.NoArgsConstructor;
 public final class ApiPathUtil {
     public static final String BASE_PATH = "/api";
     public static final String REST_PATH = BASE_PATH + "/v1";
-
-    public static String getRestPathByRole(Role role) {
-        return REST_PATH + "/" + role.name().toLowerCase();
-    }
+    public static final String CUSTOMER_PATH = REST_PATH + "/customer";
+    public static final String SELLER_PATH = REST_PATH + "/seller";
+    public static final String ADMIN_PATH = REST_PATH + "/admin";
 }
