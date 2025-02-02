@@ -1,5 +1,6 @@
 package it.polimi.mymoto.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import it.polimi.mymoto.state.definition.product.ProductState;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @Entity
@@ -49,4 +51,8 @@ public class Product implements Serializable {
 
     @ManyToOne
     private User seller;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "product")
+    private List<Review> reviews;
 }

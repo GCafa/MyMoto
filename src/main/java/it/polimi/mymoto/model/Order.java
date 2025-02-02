@@ -4,7 +4,6 @@ import it.polimi.mymoto.state.definition.order.OrderState;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 
@@ -13,7 +12,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-@Getter
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,10 +27,10 @@ public class Order implements Serializable {
     private double total;
 
     @ManyToOne
-    private User user;
+    private User customer;
 
     @ManyToMany
-    private List<Product> products;
+    private List<OrderItem> orderItems;
 
 
     /**
@@ -43,5 +41,5 @@ public class Order implements Serializable {
      *     The state is used to manage the order's lifecycle.
  *     </p>
      */
-    private transient OrderState orderState;
+    private transient OrderState state;
 }

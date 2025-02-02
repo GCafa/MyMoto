@@ -2,13 +2,22 @@ package it.polimi.mymoto.builder.implementation;
 
 import it.polimi.mymoto.builder.definition.OrderBuilder;
 import it.polimi.mymoto.model.Order;
+import it.polimi.mymoto.model.OrderItem;
+import it.polimi.mymoto.model.User;
+import it.polimi.mymoto.state.definition.order.OrderState;
+import it.polimi.mymoto.state.implementation.order.Shipping;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 public class OrderBuilderImplementation implements OrderBuilder {
     private Long id;
-    private Long userId;
-    private Long productId;
-    private int quantity;
-    private double totalPrice;
+    private LocalDateTime orderDate;
+    private String status;
+    private double total;
+    private User customer;
+    private List<OrderItem> orderItems;
+
 
     @Override
     public OrderBuilder id(Long id) {
@@ -17,32 +26,34 @@ public class OrderBuilderImplementation implements OrderBuilder {
     }
 
     @Override
-    public OrderBuilder userId(Long userId) {
-        this.userId = userId;
+    public OrderBuilder orderDate(LocalDateTime orderDate) {
+        this.orderDate = orderDate;
         return this;
     }
 
     @Override
-    public OrderBuilder productId(Long productId) {
-        this.productId = productId;
+    public OrderBuilder total(double total) {
+        this.total = total;
         return this;
     }
 
     @Override
-    public OrderBuilder quantity(int quantity) {
-        this.quantity = quantity;
+    public OrderBuilder customer(User customer) {
+        this.customer = customer;
         return this;
     }
 
     @Override
-    public OrderBuilder totalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
+    public OrderBuilder orderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
         return this;
     }
 
     @Override
     public Order build() {
-//        return new Order(id, userId, productId, quantity, totalPrice);
-        return null;
+        OrderState orderState = new Shipping();
+        return new Order(id, orderDate, orderState.toString(), total, customer, orderItems, orderState);
     }
+
+
 }

@@ -11,6 +11,6 @@ public class Sold implements ProductState {
 
     @Override
     public String toString() {
-        return "Sold";
+        return Sold.class.getSimpleName();
     }
 }

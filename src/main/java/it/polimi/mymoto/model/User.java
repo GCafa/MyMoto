@@ -41,12 +41,16 @@ public class User implements UserDetails, Serializable {
     private Role role;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "customer")
     private List<Order> orders;
 
     @JsonIgnore
     @OneToMany(mappedBy = "seller")
     private List<Product> products;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "customer")
+    private List<Review> reviews;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

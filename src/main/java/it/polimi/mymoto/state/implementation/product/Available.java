@@ -11,6 +11,6 @@ public class Available implements ProductState {
 
     @Override
     public String toString() {
-        return "Available";
+        return Available.class.getSimpleName();
     }
 }

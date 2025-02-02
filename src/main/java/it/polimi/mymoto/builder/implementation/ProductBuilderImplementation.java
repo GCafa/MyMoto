@@ -2,6 +2,7 @@ package it.polimi.mymoto.builder.implementation;
 
 import it.polimi.mymoto.builder.definition.ProductBuilder;
 import it.polimi.mymoto.model.Product;
+import it.polimi.mymoto.model.Review;
 import it.polimi.mymoto.model.User;
 import it.polimi.mymoto.service.definition.UserService;
 import it.polimi.mymoto.service.implementation.UserServiceImplementation;
@@ -9,6 +10,8 @@ import it.polimi.mymoto.state.definition.product.ProductState;
 import it.polimi.mymoto.state.implementation.product.Available;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
 
 @NoArgsConstructor
 public class ProductBuilderImplementation implements ProductBuilder {
@@ -20,6 +23,7 @@ public class ProductBuilderImplementation implements ProductBuilder {
     private String description;
     private String imagePath;
     private User seller;
+    private List<Review> reviews;
 
     @Override
     public ProductBuilder id(Long id) {
@@ -70,8 +74,14 @@ public class ProductBuilderImplementation implements ProductBuilder {
     }
 
     @Override
+    public ProductBuilder reviews(List<Review> reviews) {
+        this.reviews = reviews;
+        return this;
+    }
+
+    @Override
     public Product build() {
         ProductState state = new Available();
-        return new Product(id, brand, name, price, weight, description, state.toString(), imagePath, state, seller);
+        return new Product(id, brand, name, price, weight, description, state.toString(), imagePath, state, seller, reviews);
     }
 }
