@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Order {
+public class Order implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
@@ -33,6 +34,5 @@ public class Order {
     @ManyToMany
     private List<Product> products;
 
-    @Transient
-    private OrderState orderState;
+    private transient OrderState orderState;
 }

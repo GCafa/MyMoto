@@ -1,17 +1,18 @@
 package it.polimi.mymoto.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import it.polimi.mymoto.state.definition.product.ProductState;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Product {
+public class Product implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
@@ -36,8 +37,7 @@ public class Product {
 
     private String imagePath;
 
-    @Transient
-    private ProductState state;
+    private transient ProductState state;
 
     @ManyToOne
     private User seller;
