@@ -3,8 +3,10 @@ package it.polimi.mymoto.service.implementation;
 import it.polimi.mymoto.builder.implementation.UserBuilderImplementation;
 import it.polimi.mymoto.dto.request.UserLoginRequest;
 import it.polimi.mymoto.dto.request.UserRegistrationRequest;
+import it.polimi.mymoto.dto.response.CustomResponse;
 import it.polimi.mymoto.dto.response.LoginResponse;
-import it.polimi.mymoto.exception.custom.UserRegistrationException;
+import it.polimi.mymoto.exception.custom.EntityRegistrationException;
+import it.polimi.mymoto.exception.custom.EntityNotFoundException;
 import it.polimi.mymoto.model.Role;
 import it.polimi.mymoto.model.User;
 import it.polimi.mymoto.repository.UserRepository;
@@ -25,9 +27,9 @@ public class AuthServiceImplementation implements AuthService {
     private final JwtService jwtService;
 
     @Override
-    public void registerUser(@NonNull UserRegistrationRequest userRegistrationRequest) {
+    public CustomResponse registerUser(@NonNull UserRegistrationRequest userRegistrationRequest) {
         if(userRepository.findByUsernameOrEmail(userRegistrationRequest.getUsername(), userRegistrationRequest.getEmail()).isPresent()) {
-            throw new UserRegistrationException("Username or email already in use");
+            throw new EntityRegistrationException("Username or email already in use");
         }
 
         userRepository.save(
@@ -43,8 +45,10 @@ public class AuthServiceImplementation implements AuthService {
         Optional<User> registeredUser = userRepository.findByUsername(userRegistrationRequest.getUsername());
 
         if(registeredUser.isEmpty()) {
-            throw new UserRegistrationException();
+            throw new EntityRegistrationException(User.class);
         }
+
+        return new CustomResponse("User registered successfully");
     }
 
     @Override
@@ -53,11 +57,11 @@ public class AuthServiceImplementation implements AuthService {
             .or(() -> userRepository.findByEmail(userLoginRequest.getUsername()));
 
         if(user.isEmpty()) {
-            throw new UserRegistrationException("User not found");
+            throw new EntityNotFoundException(User.class);
         }
 
         if(!passwordEncoder.matches(userLoginRequest.getPassword(), user.get().getPassword())) {
-            throw new UserRegistrationException("Invalid password");
+            throw new EntityRegistrationException("Invalid password");
         }
 
         String token = jwtService.generateToken(user.get());

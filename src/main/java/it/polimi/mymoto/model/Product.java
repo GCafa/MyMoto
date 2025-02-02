@@ -1,9 +1,7 @@
 package it.polimi.mymoto.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import it.polimi.mymoto.state.definition.product.ProductState;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,5 +30,11 @@ public class Product {
     @Column(nullable = false)
     private String description;
 
+    @Column(nullable = false)
+    private String status;
+
     private String imagePath;
+
+    @Transient
+    private ProductState state;
 }

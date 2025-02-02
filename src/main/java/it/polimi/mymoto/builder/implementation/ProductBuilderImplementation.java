@@ -2,6 +2,8 @@ package it.polimi.mymoto.builder.implementation;
 
 import it.polimi.mymoto.builder.definition.ProductBuilder;
 import it.polimi.mymoto.model.Product;
+import it.polimi.mymoto.state.definition.product.ProductState;
+import it.polimi.mymoto.state.implementation.product.Available;
 
 public class ProductBuilderImplementation implements ProductBuilder {
     private Long id;
@@ -56,6 +58,7 @@ public class ProductBuilderImplementation implements ProductBuilder {
 
     @Override
     public Product build() {
-        return new Product(id, brand, name, price, weight, description, imagePath);
+        ProductState state = new Available();
+        return new Product(id, brand, name, price, weight, description, state.toString(), imagePath, state);
     }
 }

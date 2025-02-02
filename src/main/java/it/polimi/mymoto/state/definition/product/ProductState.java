@@ -1,5 +1,7 @@
 package it.polimi.mymoto.state.definition.product;
 
+import it.polimi.mymoto.model.Product;
+
 public interface ProductState {
-    void updateState(ProductContext context);
+    void updateState(Product product);
 }

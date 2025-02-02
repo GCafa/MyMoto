@@ -20,11 +20,11 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<CustomResponse> register(@Valid @RequestBody UserRegistrationRequest userRegistrationRequest) {
-        authenticationService.registerUser(userRegistrationRequest);
+        final CustomResponse response = authenticationService.registerUser(userRegistrationRequest);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(new CustomResponse("Registration completed!"));
+                .body(response);
     }
 
     @PostMapping("/login")

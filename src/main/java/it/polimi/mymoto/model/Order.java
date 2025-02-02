@@ -1,5 +1,6 @@
 package it.polimi.mymoto.model;
 
+import it.polimi.mymoto.state.definition.order.OrderState;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,4 +32,7 @@ public class Order {
 
     @ManyToMany
     private List<Product> products;
+
+    @Transient
+    private OrderState orderState;
 }
