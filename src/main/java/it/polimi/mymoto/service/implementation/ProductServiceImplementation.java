@@ -1,6 +1,5 @@
 package it.polimi.mymoto.service.implementation;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.mymoto.builder.implementation.ProductBuilderImplementation;
 import it.polimi.mymoto.dto.request.ProductAddRequest;
@@ -14,6 +13,7 @@ import it.polimi.mymoto.exception.custom.EntityRegistrationException;
 import it.polimi.mymoto.model.Product;
 import it.polimi.mymoto.repository.ProductRepository;
 import it.polimi.mymoto.service.definition.ProductService;
+import it.polimi.mymoto.service.definition.UserService;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
@@ -26,16 +26,18 @@ import java.util.Optional;
 public class ProductServiceImplementation implements ProductService {
     private final ProductRepository productRepository;
     private final ObjectMapper objectMapper;
+    private final UserService userService;
 
     @Override
     public CustomResponse add(@NonNull ProductAddRequest productAddRequest) {
         try {
             productRepository.save(
                 new ProductBuilderImplementation()
-                        .brand(productAddRequest.getBrand())
+                    .brand(productAddRequest.getBrand())
                     .name(productAddRequest.getName())
                     .description(productAddRequest.getDescription())
                     .price(productAddRequest.getPrice())
+                    .seller(userService.getCurrentUser())
                     .build()
             );
 
@@ -82,8 +84,8 @@ public class ProductServiceImplementation implements ProductService {
     }
 
     @Override
-    public List<ProductResponse> getAll() {
-        List<Product> products = productRepository.findAll();
+    public List<ProductResponse> getAllBySeller() {
+        List<Product> products = productRepository.findAllBySeller(userService.getCurrentUser());
 
         return products.stream()
                 .map(product -> objectMapper.convertValue(product, ProductResponse.class))

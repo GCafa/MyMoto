@@ -3,16 +3,12 @@ package it.polimi.mymoto.controller;
 import it.polimi.mymoto.dto.request.UserModifyRequest;
 import it.polimi.mymoto.dto.request.UserPasswordChangeRequest;
 import it.polimi.mymoto.dto.response.CustomResponse;
-import it.polimi.mymoto.dto.response.ProductResponse;
 import it.polimi.mymoto.service.definition.UserService;
 import it.polimi.mymoto.util.ApiPathUtil;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
 
 @RestController
 @RequestMapping(ApiPathUtil.REST_PATH + "/user")

@@ -50,7 +50,7 @@ public class ProductController {
 
     @GetMapping("/all")
     public ResponseEntity<List<ProductResponse>> getAll() {
-        final List<ProductResponse> response = productService.getAll();
+        final List<ProductResponse> response = productService.getAllBySeller();
 
         return ResponseEntity
                 .status(HttpStatus.OK)

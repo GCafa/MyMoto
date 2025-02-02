@@ -8,6 +8,7 @@ import it.polimi.mymoto.service.definition.AuthService;
 import it.polimi.mymoto.util.ApiPathUtil;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,8 +32,12 @@ public class AuthController {
     public ResponseEntity<LoginResponse> authenticate(@Valid @RequestBody UserLoginRequest userLoginRequest) {
         final LoginResponse response = authenticationService.authenticateUser(userLoginRequest);
 
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + response.getJwt());
+
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .ok()
+                .headers(headers)
                 .body(response);
     }
 }

@@ -2,9 +2,15 @@ package it.polimi.mymoto.builder.implementation;
 
 import it.polimi.mymoto.builder.definition.ProductBuilder;
 import it.polimi.mymoto.model.Product;
+import it.polimi.mymoto.model.User;
+import it.polimi.mymoto.service.definition.UserService;
+import it.polimi.mymoto.service.implementation.UserServiceImplementation;
 import it.polimi.mymoto.state.definition.product.ProductState;
 import it.polimi.mymoto.state.implementation.product.Available;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
+@NoArgsConstructor
 public class ProductBuilderImplementation implements ProductBuilder {
     private Long id;
     private String brand;
@@ -13,6 +19,7 @@ public class ProductBuilderImplementation implements ProductBuilder {
     private double weight;
     private String description;
     private String imagePath;
+    private User seller;
 
     @Override
     public ProductBuilder id(Long id) {
@@ -57,8 +64,14 @@ public class ProductBuilderImplementation implements ProductBuilder {
     }
 
     @Override
+    public ProductBuilder seller(User seller) {
+        this.seller = seller;
+        return this;
+    }
+
+    @Override
     public Product build() {
         ProductState state = new Available();
-        return new Product(id, brand, name, price, weight, description, state.toString(), imagePath, state);
+        return new Product(id, brand, name, price, weight, description, state.toString(), imagePath, state, seller);
     }
 }

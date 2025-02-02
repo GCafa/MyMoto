@@ -1,5 +1,6 @@
 package it.polimi.mymoto.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import it.polimi.mymoto.state.definition.product.ProductState;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -37,4 +38,7 @@ public class Product {
 
     @Transient
     private ProductState state;
+
+    @ManyToOne
+    private User seller;
 }

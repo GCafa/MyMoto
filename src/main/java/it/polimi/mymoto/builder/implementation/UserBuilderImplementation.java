@@ -2,6 +2,7 @@ package it.polimi.mymoto.builder.implementation;
 
 import it.polimi.mymoto.builder.definition.UserBuilder;
 import it.polimi.mymoto.model.Order;
+import it.polimi.mymoto.model.Product;
 import it.polimi.mymoto.model.Role;
 import it.polimi.mymoto.model.User;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ public class UserBuilderImplementation implements UserBuilder {
     private String password;
     private Role role;
     private List<Order> orders;
+    private List<Product> products;
 
     @Override
     public UserBuilder id(Long id) {
@@ -68,7 +70,13 @@ public class UserBuilderImplementation implements UserBuilder {
     }
 
     @Override
+    public UserBuilder products(List<Product> products) {
+        this.products = products;
+        return this;
+    }
+
+    @Override
     public User build() {
-        return new User(id, firstName, lastName, username, email, password, role, orders);
+        return new User(id, firstName, lastName, username, email, password, role, orders, products);
     }
 }

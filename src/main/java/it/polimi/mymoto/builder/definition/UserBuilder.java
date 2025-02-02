@@ -1,6 +1,7 @@
 package it.polimi.mymoto.builder.definition;
 
 import it.polimi.mymoto.model.Order;
+import it.polimi.mymoto.model.Product;
 import it.polimi.mymoto.model.Role;
 import it.polimi.mymoto.model.User;
 
@@ -15,5 +16,6 @@ public interface UserBuilder {
     UserBuilder password(String password);
     UserBuilder role(Role role);
     UserBuilder orders(List<Order> orders);
+    UserBuilder products(List<Product> products);
     User build();
 }
